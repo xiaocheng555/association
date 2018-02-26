@@ -1,8 +1,6 @@
 const Sequelize = require('sequelize');
-const sequelizeConfig = require('../config/index').sequelizeConfig;
+const { database, username, password, options } = require('../config').sequelizeConfig;
 
-// console.log(...sequelizeConfig, '...sequelizeConfig')
-// const sequelize = new Sequelize(...sequelizeConfig)
-const sequelize = new Sequelize(sequelizeConfig.database, sequelizeConfig.username, sequelizeConfig.password, sequelizeConfig.options)
+const sequelize = new Sequelize(database, username, password, options)
 
 module.exports = sequelize

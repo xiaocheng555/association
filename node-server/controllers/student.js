@@ -1,7 +1,7 @@
-const studentModel = require('../models/student')
+const StudentModel = require('../models').Student
 
 exports.student = function (req, res) {
-  studentModel.findById(1).then(project => {
+  StudentModel.findById(1).then(project => {
     // res.send('project ' + JSON.stringify(project));
     res.json(project)
   })
