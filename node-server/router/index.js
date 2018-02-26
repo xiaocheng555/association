@@ -1,7 +1,5 @@
-var index = require('./routes/index');
-var users = require('./routes/users');
+var student = require('./routes/student');
 
 module.exports = function (app) {
-  app.use('/', index);
-  app.use('/users', users);
+  app.use('/student', student);
 }
