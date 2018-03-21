@@ -5,6 +5,9 @@ const Student = db.defineModel('student', {
   name: {
     type: Sequelize.STRING(50)
   },
+  sno: {
+    type: Sequelize.STRING(50)
+  },
   sex: {
     type: Sequelize.BIGINT(2)
   },
@@ -35,7 +38,7 @@ const Student = db.defineModel('student', {
   qq: {
     type: Sequelize.STRING(50)
   },
-  pwd: {
+  password: {
     type: Sequelize.STRING(100)
   },
   nation: {
