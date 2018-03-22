@@ -33,3 +33,9 @@ exports.db = {
  * 生成token的私密钥匙
 */
 exports.privateKey = 'associationKey'
+
+
+/* 
+ * 获取列表页数默认为10条
+*/
+exports.defaultPageSize = 10

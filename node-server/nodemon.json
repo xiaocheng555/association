@@ -1,0 +1,19 @@
+{
+  "ignore": [
+    ".git",
+    "node_modules/**/node_modules"
+  ],
+  "verbose": true,
+  "watch": [
+    "controllers/",
+    "models/",
+    "bin/",
+    "config/",
+    "routes/",
+    "ulits/",
+    "app.js/",
+    "db.js/"
+  ],
+  "exec": "node ./bin/www",
+  "ext": "js"
+}

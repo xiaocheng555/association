@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-19 11:08:41 pm
+ * Last Modified: 2018-03-22 3:19:43 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -13,7 +13,9 @@ const { database, username, password, options } = require('./config').db;
 const { toUnderscore } = require('./ulits/common')
 
 const seqInstance = new Sequelize(database, username, password, options);
-const db = {};
+const db = {
+  sequelize: seqInstance
+};
 
 /* 
  * db.defineModel方法：对seqInstance.defined 进行扩展
@@ -33,8 +35,9 @@ db.defineModel = function (name, attributes, options) {
   } else {
     defaultArr.createdAt = {
       type: Sequelize.DATE,
-      get() {
-        return this.getDataValue('createdAt').getTime()
+      get () {
+        let createdTime = this.getDataValue('createdAt')
+        return createdTime ? createdTime.getTime() : null
       }
     };
     defaultArr.updatedAt = {

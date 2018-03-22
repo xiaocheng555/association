@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-19 11:08:23 pm
+ * Last Modified: 2018-03-22 9:28:35 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -33,19 +33,22 @@ const Activity = db.defineModel('activity', {
   directorTel: {
     type: Sequelize.STRING(20)
   },
-  approve_advise: {
+  // 审批意见
+  approveAdvise: {
     type: Sequelize.STRING(2000)
   },
-  confirm_type: {
+  // 确定名单类型：0为名单未提交，1为名单提交，2为名单确定成功，-1为名单确定失败
+  confirmType: {
     type: Sequelize.STRING(4)
   },
+  // 审批类型：0为待审批，1为审批通过，-1为审批驳回
   approveType: {
     type: Sequelize.TINYINT(4)
   },
-  is_delete: {
+  isDelete: {
     type: Sequelize.TINYINT(4)
   },
-  admin_id: {
+  adminId: {
     type: Sequelize.INTEGER
   }
 })

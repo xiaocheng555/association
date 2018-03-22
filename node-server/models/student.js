@@ -47,13 +47,13 @@ const Student = db.defineModel('student', {
   duration: {
     type: Sequelize.STRING(10)
   },
-  grade_id: {
+  gradeId: {
     type: Sequelize.INTEGER
   },
-  academy_id: {
+  academyId: {
     type: Sequelize.INTEGER
   },
-  class_id: {
+  classId: {
     type: Sequelize.INTEGER
   }
 }, {

@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-19 11:03:51 pm
+ * Last Modified: 2018-03-21 11:43:47 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -18,7 +18,7 @@ const Message = db.defineModel('message', {
   type: {
     type: Sequelize.BIGINT(2)
   },
-  message_id: {
+  messageId: {
     type: Sequelize.INTEGER
   }
 })

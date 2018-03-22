@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-19 11:07:25 pm
+ * Last Modified: 2018-03-21 11:44:22 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -15,16 +15,16 @@ const StudentPosition = db.defineModel('student_position', {
   name: {
     type: Sequelize.STRING(100)
   },
-  position_id: {
+  positionId: {
     type: Sequelize.INTEGER
   },
-  association_id: {
+  associationId: {
     type: Sequelize.INTEGER
   },
-  department_id: {
+  departmentId: {
     type: Sequelize.INTEGER
   },
-  is_tired: {
+  isTired: {
     type: Sequelize.TINYINT(4)
   }
 })

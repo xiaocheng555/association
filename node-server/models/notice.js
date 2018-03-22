@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-19 11:04:26 pm
+ * Last Modified: 2018-03-22 3:16:32 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -18,7 +18,10 @@ const Notice = db.defineModel('notice', {
   content: {
     type: Sequelize.STRING
   },
-  admin_id: {
+  adminId: {
+    type: Sequelize.INTEGER
+  },
+  associationId: {
     type: Sequelize.INTEGER
   }
 })

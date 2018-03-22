@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-19 11:07:54 pm
+ * Last Modified: 2018-03-21 11:43:42 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -15,10 +15,10 @@ const LeaveMessage = db.defineModel('leave_message', {
   content: {
     type: Sequelize.TEXT('long')
   },
-  student_id: {
+  studentId: {
     type: Sequelize.INTEGER
   },
-  association_id: {
+  associationId: {
     type: Sequelize.INTEGER
   }
 })

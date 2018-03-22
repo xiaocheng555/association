@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-19 11:08:12 pm
+ * Last Modified: 2018-03-21 11:43:07 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -21,10 +21,10 @@ const Admin = db.defineModel('admin', {
   password: {
     type: Sequelize.STRING(100)
   },
-  is_system: {
+  isSystem: {
     type: Sequelize.TINYINT(2)
   },
-  association_id: {
+  associationId: {
     type: Sequelize.INTEGER
   },
 })
