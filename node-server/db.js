@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 12:35:40 pm
+ * Last Modified: 2018-03-23 12:45:47 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -14,6 +14,7 @@ const { toUnderscore } = require('./ulits/common')
 
 const seqInstance = new Sequelize(database, username, password, options);
 const db = {
+  // 将seqInstance实例存储
   sequelize: seqInstance
 };
 

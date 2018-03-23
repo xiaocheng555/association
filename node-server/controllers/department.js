@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-22 7:07:49 pm
+ * Last Modified: 2018-03-23 1:05:00 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -12,27 +12,25 @@ const { Department } = require('../models')
 const pagination = require('../ulits/pagination.js')
 
 /* 
- * 添加一条公告
+ * 添加一条部门
 */
 exports.create = function (req, res, next) {
-  let name = req.body.name || null
-  let content = req.body.content || null
-  let adminId = req.body.adminId || null
-  let associationId = req.body.associationId || null
+  let name = req.body.name
+  let introduce = req.body.introduce
+  let associationId = req.body.associationId
   Department.create({
-    name: name,
-    content: content,
-    adminId: adminId,
-    associationId: associationId
+    name,
+    introduce,
+    associationId
   }).then(data => {
     res.json({
       errorCode: 0,
-      message: '公告保存成功'
+      message: '部门保存成功'
     })
   }).catch(error => {
     res.json({
       errorCode: 2000,
-      message: error
+      message: '部门保存失败'
     })
   })
 }
@@ -42,7 +40,7 @@ exports.create = function (req, res, next) {
 */
 exports.destroy = function (req, res, next) {
   let id = req.body.id
-  Association.destroy({
+  Department.destroy({
     where: {
       id: id
     }
@@ -71,15 +69,16 @@ exports.destroy = function (req, res, next) {
 */
 exports.save = async function (req, res, next) {
   let id = req.body.id
-  let association = await Association.findById(id)
-  if (!association) {
+  let department = await Department.findById(id)
+  if (!department) {
     res.json({
       errorCode: 3105,
       message: '找不到该部门'
     })
   }
-  association.introduction = req.body.introduction
-  await association.save()
+  department.name = req.body.name
+  department.introduce = req.body.introduce
+  await department.save()
   res.json({
     errorCode: 0,
     message: '部门更新成功'
@@ -91,7 +90,7 @@ exports.save = async function (req, res, next) {
 */
 exports.detail = function (req, res) {
   let id = req.query.id
-  Association.findById(id).then(data => {
+  Department.findById(id).then(data => {
     res.json({
       errorCode: 0,
       data: data
@@ -104,7 +103,7 @@ exports.detail = function (req, res) {
 */
 exports.list = function (req, res, next) {
   // 分页
-  pagination(req, Association).then(data => {
+  pagination(req, Department).then(data => {
     res.json({
       errorCode: 0,
       data: data
