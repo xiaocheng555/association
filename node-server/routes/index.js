@@ -3,6 +3,7 @@ const student = require('./student');
 const admin = require('./admin');
 const notice = require('./notice');
 const activity = require('./activity');
+const association = require('./association');
 
 module.exports = function (app) {
   app.use(verifyToken);
@@ -10,4 +11,5 @@ module.exports = function (app) {
   app.use('/admin', admin);
   app.use('/notice', notice);
   app.use('/activity', activity);
+  app.use('/association', association);
 }

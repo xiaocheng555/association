@@ -4,19 +4,13 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-22 10:55:26 am
+ * Last Modified: 2018-03-22 6:07:29 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 const jwt = require('jsonwebtoken');
 const Student = require('../models/student')
 const { privateKey } = require('../config')
-
-exports.student = function (req, res) {
-  Student.findById(1).then(data => {
-    res.json(data)
-  })
-}
 
 /* 
  * 学生登录
@@ -39,13 +33,10 @@ exports.login = async function (req, res) {
     let token = jwt.sign({ sid: studentData.id }, privateKey, {
       expiresIn: 30
     });
+    delete data.password
     return res.json({
       errorCode: 0,
-      data: {
-        id: studentData.id,
-        token: token,
-        name: studentData.name
-      }
+      data: data
     })
   } else {
     return res.json({

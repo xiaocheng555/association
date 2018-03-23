@@ -4,12 +4,13 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-22 1:20:00 pm
+ * Last Modified: 2018-03-22 7:12:15 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 const { Notice, Association, Admin } = require('../models')
 const pagination = require('../ulits/pagination.js')
+
 /* 
  * 添加一条公告
 */
@@ -24,6 +25,7 @@ exports.create = function (req, res, next) {
     adminId: adminId,
     associationId: associationId
   }).then(data => {
+    console.log(Notice)
     res.json({
       errorCode: 0,
       message: '公告保存成功'
