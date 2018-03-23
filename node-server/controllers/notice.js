@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-22 7:12:15 pm
+ * Last Modified: 2018-03-23 12:35:37 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -25,7 +25,6 @@ exports.create = function (req, res, next) {
     adminId: adminId,
     associationId: associationId
   }).then(data => {
-    console.log(Notice)
     res.json({
       errorCode: 0,
       message: '公告保存成功'
