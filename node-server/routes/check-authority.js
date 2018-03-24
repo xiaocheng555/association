@@ -4,14 +4,15 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-21 12:29:39 pm
+ * Last Modified: 2018-03-24 3:52:56 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 const jwt = require('jsonwebtoken');
+const session = require('express-session')
 const { privateKey } = require('../config')
 
 /* 
- * 统一处理token
+ * 统一处理接口权限
 */
 module.exports = function (req, res, next) {
   let token = req.headers.accesstoken

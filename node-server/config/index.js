@@ -32,7 +32,7 @@ exports.db = {
 /* 
  * 生成token的私密钥匙
 */
-exports.privateKey = 'associationKey'
+exports.privateKey = 'associationPrivateKey'
 
 
 /* 

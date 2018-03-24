@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 1:52:48 pm
+ * Last Modified: 2018-03-24 4:11:43 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -28,15 +28,33 @@ exports.login = async function (req, res) {
       message: '学生不存在'
     })
   }
+  let accessToken
   // 如果学生密码验证成功
   if (studentData.password === password) {
-    let token = jwt.sign({ sid: studentData.id }, privateKey, {
+    accessToken = jwt.sign({ sid: studentData.id }, privateKey, {
       expiresIn: 30
     });
-    delete data.password
+    studentData.password = undefined
     return res.json({
       errorCode: 0,
-      data: data
+      data: {
+        id: studentData.id,
+        name: studentData.name,
+        sno: studentData.sno,
+        sex: studentData.sex,
+        age: studentData.age,
+        class: studentData.class,
+        academy: studentData.academy,
+        grade: studentData.grade,
+        level: studentData.level,
+        major: studentData.major,
+        address: studentData.address,
+        tel: studentData.tel,
+        qq: studentData.qq,
+        nation: studentData.nation,
+        duration: studentData.duration,
+        accessToken
+      }
     })
   } else {
     return res.json({
@@ -61,5 +79,4 @@ exports.filterInfo = async function (req, res) {
       classList
     }
   })
-  
 }

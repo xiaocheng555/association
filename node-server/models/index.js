@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-22 11:52:36 am
+ * Last Modified: 2018-03-24 7:13:55 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -29,12 +29,6 @@ const StudentActivity = require('./student-activity.js')
  * 建立模型之间的关系
  */
 // 一对多
-// Class.hasMany(Student)
-// Student.belongsTo(Class)
-// Academy.hasMany(Student)
-// Student.belongsTo(Academy)
-// Grade.hasMany(Student)
-// Student.belongsTo(Grade)
 Association.hasMany(Department)
 Department.belongsTo(Association)
 Association.hasMany(Admin)
@@ -44,9 +38,11 @@ Notice.belongsTo(Admin)
 Admin.hasMany(Activity)
 Activity.belongsTo(Admin)
 Student.hasMany(LeaveMessage)
+Admin.hasMany(LeaveMessage)
 LeaveMessage.belongsTo(Student)
-Association.hasMany(LeaveMessage)
-LeaveMessage.belongsTo(Association)
+LeaveMessage.belongsTo(Admin)
+// Student.belongsTo(StudentActivity)
+// StudentActivity.hasMany(Student)
 
 // 多对多
 Association.belongsToMany(Student, { through: StudentAssociation })

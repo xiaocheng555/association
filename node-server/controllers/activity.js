@@ -4,12 +4,12 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-22 1:20:26 pm
+ * Last Modified: 2018-03-24 8:56:36 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
-const Op = require('sequelize').Op;
-const { Activity, Association, Admin } = require('../models')
+const Op = require('sequelize').Op
+const { Activity, Association, Admin, Student } = require('../models')
 const pagination = require('../ulits/pagination.js')
 
 /* 
@@ -56,23 +56,23 @@ exports.create = function (req, res, next) {
 
 /* 
  * 删除一条活动
+ * 通过设置isDelete为1，进行假删除，保留原来数据
 */
-exports.destroy = function (req, res, next) {
+exports.destroy = async function (req, res, next) {
   let id = req.body.id
-  Activity.destroy({
-    where: {
-      id: id
-    }
-  }).then(data => {
-    res.json({
-      errorCode: 0,
-      message: '活动删除成功'
+  let activity = await Activity.findById(id)
+  if (!activity) {
+    return res.json({
+      errorCode: 2108,
+      message: '活动不存在'
     })
-  }).catch(error => {
-    res.json({
-      errorCode: 2101,
-      message: error
-    })
+  }
+  // 假删除, isDelete: 1为删除，0为未删除
+  activity.isDelete = 1
+  await activity.save()
+  res.json({
+    errorCode: 0,
+    message: '活动删除成功'
   })
 }
 
@@ -131,11 +131,10 @@ exports.detail = async function (req, res, next) {
       include: [Association]
     }],
     where: {
-      id: id
-      // isDelete != 1
-      // isDelete: {
-      //   [Op.ne]: 1
-      // }
+      id: id,
+      isDelete: {
+        [Op.ne]: 1
+      }
     }
   }).then(data => {
     let resData = null
@@ -181,7 +180,15 @@ exports.list = async function (req, res, next) {
           id: associationId
         }
       }]
-    }]
+    }],
+    where: {
+      isDelete: {
+        [Op.or]: {
+          [Op.ne]: 1,
+          [Op.eq]: null
+        }
+      }
+    }
   }).then(data => {
     data.list.forEach((item, index) => {
       data.list[index] = {
@@ -207,5 +214,92 @@ exports.list = async function (req, res, next) {
       errorCode: 2003,
       message: error
     })
+  })
+}
+
+/* 
+ * 审批活动
+*/
+exports.approve = async function (req, res, next) {
+  let id = res.boyd.id
+  let activity = await Activity.findById(id)  
+  if (!activity) {
+    return res.json({
+      errorCode: 2108,
+      message: '活动不存在'
+    })
+  }
+  try {
+    // 审批类型：0为待审批，1为审批通过，-1为审批驳回
+    activity.approveType = res.boyd.approveType
+    await activity.save()
+    res.json({
+      errorCode: 0,
+      data: '活动审批成功'
+    })
+  } catch (err) {
+    res.json({
+      errorCode: 0,
+      message: '活动审批失败'
+    })
+  }
+}
+
+/* 
+ * 确定活动名单
+*/
+exports.confirmStudentJoinList = async function (req, res, next) {
+  let id = res.boyd.id
+  let activity = await Activity.findById(id)
+  if (!activity) {
+    return res.json({
+      errorCode: 2108,
+      message: '活动不存在'
+    })
+  }
+  try {
+    // 确定名单类型：0为名单未提交，1为名单提交，2为名单确定成功，-1为名单确定失败
+    activity.confirmType = res.boyd.confirmType
+    await activity.save()
+    res.json({
+      errorCode: 0,
+      data: '提交成功'
+    })
+  } catch (err) {
+    res.json({
+      errorCode: 0,
+      message: '提交失败'
+    })
+  }
+}
+
+/* 
+ * 参与活动的学生名单
+*/
+exports.studentJoinList = async function (req, res, next) {
+  let activityId = req.query.activityId
+  // 分页
+  let resData = await pagination(req, Student, {
+    include: [{
+      model: Activity,
+      where: {
+        id: activityId
+      },
+      through: {}
+      // through: {
+      //   where: {
+      //     id: 5
+      //   }
+      // }
+    }]
+  })
+  if (resData.list.length > 0) {
+    resData.list.forEach((item, index) => {
+      resData.list[index].password = undefined
+    })
+  }
+  res.json({
+    errorCode: 0,
+    data: resData
   })
 }

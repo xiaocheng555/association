@@ -4,12 +4,11 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 1:05:00 pm
+ * Last Modified: 2018-03-23 2:06:59 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 const { Department } = require('../models')
-const pagination = require('../ulits/pagination.js')
 
 /* 
  * 添加一条部门
@@ -102,8 +101,7 @@ exports.detail = function (req, res) {
  * 获取部门列表
 */
 exports.list = function (req, res, next) {
-  // 分页
-  pagination(req, Department).then(data => {
+  Department.findAll().then(data => {
     res.json({
       errorCode: 0,
       data: data

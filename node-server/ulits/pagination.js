@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 1:24:13 pm
+ * Last Modified: 2018-03-23 8:07:05 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -16,8 +16,8 @@ const { defaultPageSize } = require('../config')
  * @param options 查询选项，如where
 */
 module.exports = async function (req, model, options) {
-  let pageSize = req.query.pageSize || defaultPageSize
-  let pageNum =  req.query.pageNum || 1
+  let pageSize =  Number(req.query.pageSize) || defaultPageSize
+  let pageNum =  Number(req.query.pageNum) || 1
   const data = await model.findAndCountAll({
     ...options,
     offset: (pageNum - 1) * pageSize,
