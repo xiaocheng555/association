@@ -10,7 +10,7 @@
         <app-side-menu></app-side-menu>
       </el-aside>
       <el-main id="app-main">
-        <app-breadcrumb></app-breadcrumb>
+        <app-breadcrumb ref="breadcrumb"></app-breadcrumb>
         <router-view/>
       </el-main>
     </el-container>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import AppHeader from './app-header'
 import AppSideMenu from './app-side-menu'
 import AppBreadcrumb from './app-breadcrumb'
@@ -28,6 +29,15 @@ export default {
     AppHeader,
     AppSideMenu,
     AppBreadcrumb
+  },
+  methods: {
+    ...mapMutations(['updateUserInfo'])
+  },
+  created () {
+
+  },
+  mounted () {
+    // this$refs.breadcrumb
   }
 }
 </script>

@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 8:07:05 pm
+ * Last Modified: 2018-03-27 10:08:00 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -23,19 +23,19 @@ module.exports = async function (req, model, options) {
     offset: (pageNum - 1) * pageSize,
     limit: pageSize,
   })
-  let totalPage = data.count
+  let totalCount = data.count
   let nextPage = true
   // 如果获取的数据量比实际数据总数量的大
-  if (pageNum * pageSize >= totalPage) {
+  if (pageNum * pageSize >= totalCount) {
     // 无下一页
     nextPage = false
     // pageNum重新计算
-    pageNum = totalPage === 0 ? 1 : Math.ceil(totalPage / pageSize)
+    pageNum = totalCount === 0 ? 1 : Math.ceil(totalCount / pageSize)
   }
   let previousPage = pageNum !== 1
   return {
     list: data.rows,
-    totalPage: totalPage,
+    totalCount: totalCount,
     nextPage: nextPage,
     previousPage: previousPage,
     pageNum: pageNum,

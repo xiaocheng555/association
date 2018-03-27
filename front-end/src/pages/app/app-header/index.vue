@@ -4,24 +4,24 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-27 1:09:43 pm
+ * Last Modified: 2018-03-28 12:04:50 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 <template>
   <div class="app-header cl">
-    <h1 class="app-title fl">
-      大学生社团管理系统
+    <h1 class="fl">
+      <router-link class="header-link" to="home">大学生社团管理系统</router-link>
     </h1>
     <a class="user-login fr" href="javascript:;">
-      <el-dropdown v-if="user">
+      <el-dropdown v-if="userInfo.id">
         <span class="user-info el-dropdown-link">
-          <img class="avatar-img" :src="user.avatar" alt="">
-          <span>{{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i></span>
+          <img class="avatar-img" :src="avatar" alt="">
+          <span>{{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i></span>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item @click.native="userLogout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <div class="no-login" v-else @click="showLoginPannel">
@@ -43,58 +43,135 @@
         <el-checkbox class="choose-role fl" v-model="isAdmin">是否为管理员</el-checkbox>
         <a class="forget-password fr" href="javascript:;">忘记密码？</a>
       </div>
-      <el-button type="primary" class="login-submit">立即登录</el-button>
+      <el-button type="primary" class="login-submit" @click.native="userLogin">立即登录</el-button>
     </div>
     <!-- 遮罩层 -->
     <div
       class="bg-mask"
       v-show="loginPannelShow"
-      @click="closeMask"></div>
+      @click="closeLoginPannel"></div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import avatar from '../../../assets/images/user.jpg'
 
 export default {
   name: 'app-header',
   data () {
     return {
-      user: {
-        name: '张焕城',
-        avatar: avatar
-      },
       username: '',
       password: '',
       isAdmin: false,
-      loginPannelShow: false
+      loginPannelShow: false,
+      avatar
     }
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   methods: {
-    closeMask () {
+    closeLoginPannel () {
       this.loginPannelShow = false
     },
     showLoginPannel () {
       this.loginPannelShow = true
-    }
+    },
+    // 用户登录
+    userLogin () {
+      if (!this.validateForm()) return
+      this.$store.dispatch('student-login', {
+        data: {
+          user: this.username,
+          password: this.password
+        }
+      }).then(res => {
+        let data = res.data
+        if (res && res.errorCode === 0 && data) {
+          // 关闭登录框
+          this.closeLoginPannel()
+          // 更新store的用户信息
+          this.updateUserInfo({
+            id: data.id,
+            name: data.name,
+            avatar: null
+          })
+          // 重置表单
+          this.username = ''
+          this.password = ''
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '用户或密码输入不正确',
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        this.$message({
+          message: err.toString(),
+          type: 'error'
+        })
+      })
+    },
+    // 验证登录表单
+    validateForm () {
+      let user = this.username.trim()
+      let password = this.password.trim()
+      let errMsg
+      if (user === '' || password === '') {
+        errMsg = '用户和密码不能为空'
+      }
+      if (errMsg) {
+        this.$message({
+          message: errMsg,
+          type: 'error'
+        })
+        return false
+      }
+      return true
+    },
+    // 用户退出登录
+    userLogout () {
+      setTimeout(() => {
+        this.updateUserInfo({
+          id: null,
+          name: null,
+          avatar: null
+        })
+        this.$router.push({
+          name: 'home'
+        })
+        this.$message({
+          type: 'success',
+          message: '退出成功'
+        })
+      }, 200)
+    },
+    ...mapMutations(['updateUserInfo'])
   },
   created () {
-    console.log(this.user)
+    console.log(window.localStorage.getItem('id'), '123')
   }
 }
 </script>
 
 <style lang="less" scoped>
+@import '../../../assets/styles/variable.less';
+
 .app-header {
   height: 60px;
   line-height: 60px;
-}
 
-.app-title {
-  height: 100%;
-  font-size: 22px;
-  font-weight: 100;
-  color: #ffffff;
+  .header-link {
+    display: block;
+    font-size: 22px;
+    font-weight: 100;
+    color: #ffffff;
+  }
 }
 
 .user-login {
@@ -134,8 +211,8 @@ export default {
   left: 50%;
   z-index: 500;
   width: 380px;
-  margin-left: -150px;
-  margin-top: -190px;
+  margin-left: -190px;
+  margin-top: -150px;
   padding: 0 35px 35px 35px;
   border-radius: 5px;
   background-color: #ffffff;
@@ -147,7 +224,7 @@ export default {
   }
 
   .login-operate {
-    padding: 10px 0 18px;
+    padding: 5px 0 18px;
     line-height: 24px;
 
     .forget-password {

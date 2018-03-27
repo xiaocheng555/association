@@ -1,43 +1,41 @@
-/**
- * File: 系统请求事件注册文件
- * File Created: 2018-02-28 1:30:10 pm
- * Author: wangji (ji1.wang@meicloud.com)
- * Copyright: 2017 - 2018 Copyright (c), 深圳美云智数科技有限公司
- * -----
- * Last Modified: 2018-03-05 4:36:34 pm
- * Modified By: wangji (ji1.wang@meicloud.com)
- */
 import Vue from 'vue'
-import { MxHttpService } from 'mx-ui'
-import _config from 'shared@/config'
+import HttpService from '@/plugins/service'
+import _config from '@/config/base'
 
-Vue.use(MxHttpService)
+Vue.use(HttpService)
+
+// 获取accessToken
+let accessToken = window.localStorage.getItem('accessToken')
 
 // 默认请求配置
 const requestsDefine = [
   {
-    name: 'apiv2-organization-emp',
+    name: 'student-login',
     config: {
-      url: _config['server-host'] + 'imm-api/apiv2/organization/emp',
+      url: _config['server-host'] + 'student/login',
+      method: 'post'
+    }
+  },
+  {
+    name: 'notice-list',
+    config: {
+      url: _config['server-host'] + 'notice/list',
       method: 'get'
     }
   }
 ]
 
 // 初始化全局请求拦截器
-MxHttpService.bootstrap({
+HttpService.bootstrap({
   beforeSend: config => {
-    console.log('beforeSend', 'bootstrap')
     return config
   },
   dataFilter: (response, config) => {
-    console.log('dataFilter', 'bootstrap')
     // 只处理响应状态吗为 200 时的返回数据
     if (response.status === 200) return response.data
     return null
   },
   success: (response, config) => {
-    console.log('success', 'bootstrap')
     if (response.status === 200) {
       // 如果返回的数据 code 码异常，则提示服务端信息
       if (response.data.code !== 1) {
@@ -45,15 +43,11 @@ MxHttpService.bootstrap({
       }
     } else {
       // 如果请求状态不是 200 则提示异常
-      if (Vue.prototype.$_appToast) Vue.prototype.$_appToast('请求状态异常: ', response.status)
     }
   },
-  error: (error, config) => {
-    console.log('error', 'bootstrap')
-    if (Vue.prototype.$_appToast) Vue.prototype.$_appToast('请求服务出错: ', error)
+  error: (errorObj, config) => {
   },
   complete: (response, config) => {
-    console.log('complete', 'bootstrap')
   }
 })
 
@@ -69,7 +63,7 @@ function mixinRequestConfig (context, config, mode) {
       if (config === undefined || config === null) config = {}
       // 往 headers 中混合 accessToken
       config.headers = Object.assign({
-        accessToken: context.state.userInfo.accessToken
+        accessToken: accessToken
       }, config.headers || {})
       break
   }
@@ -92,7 +86,7 @@ function injectRequestsDefine (requestsDefine) {
       if (requestsActions[request.name] === undefined) {
         requestsActions[request.name] = (context, config) => {
           const requestConfig = Object.assign(request.config, config)
-          return MxHttpService.request(mixinRequestConfig(context, requestConfig, request.mode))
+          return HttpService.request(mixinRequestConfig(context, requestConfig, request.mode))
         }
       } else {
         console.error('requests-define', 'injectRequestsDefine', '请求定义对象已经存在', 'request: ', request)

@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-27 1:25:01 pm
+ * Last Modified: 2018-03-27 10:47:45 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -17,7 +17,7 @@
         v-for="(item, index) in menuList">
         <!-- 一级导航 -->
         <el-menu-item
-          v-if="!item.submenu"
+          v-if="!item.submenus"
           :key="index"
           :index="item.index">
           <router-link :to="{ name: item.route }" tag="p">
@@ -61,7 +61,7 @@ export default {
         },
         {
           index: '2',
-          route: 'activity',
+          route: 'activity-list',
           icon: 'iconfont icon-carryout',
           name: '活动'
         },
@@ -104,10 +104,8 @@ export default {
     }
   },
   created () {
-    console.log(12)
     this.$router.beforeEach((to, from, next) => {
       this.menuList.forEach(menu => {
-        console.log(to.name, menu.route)
         if (typeof menu.submenu === 'undefined') {
           if (to.name === menu.route) {
             this.activeIndex = menu.index

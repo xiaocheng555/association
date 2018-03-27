@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-27 1:02:43 pm
+ * Last Modified: 2018-03-28 12:51:24 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -49,21 +49,21 @@ export default {
 
 .pannel-title {
   position: relative;
-  padding: 15px 15px 10px;
+  padding: 15px 20px 15px;
   font-size: 18px;
 
   &:after {
     content: "";
     position: absolute;
     display: block;
-    left: 15px;
-    right: 15px;
+    left: 20px;
+    right: 20px;
     bottom: 0px;
     border-bottom: 1px solid @default-border-color;
   }
 }
 
 .pannel-body {
-  padding: 15px;
+  padding: 20px 20px 50px;
 }
 </style>
