@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-28 1:08:33 am
+ * Last Modified: 2018-03-28 1:39:34 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -13,8 +13,8 @@
     <common-pannel title="公告">
       <el-table
         :data="noticeList"
-        stripe="true"
-        border="true"
+        :stripe="true"
+        :border="true"
         style="width: 100%">
         <el-table-column
           label="标题">
@@ -55,7 +55,7 @@ export default {
       this.$store.dispatch('notice-list').then((res) => {
         if (res && res.data && res.errorCode === 0) {
           this.noticeList = this.handleListData(res.data.list)
-          console.log(this.noticeList)
+          console.log(this.noticeList, 'noticeList')
         } else {
           this.$message({
             type: 'error',
@@ -81,7 +81,7 @@ export default {
         return {
           id: item.id,
           name: item.name,
-          date: moment(item.createdAt, 'YYYY-MM-DD HH'),
+          date: moment(item.createdAt).format('YYYY-MM-DD'),
           principal: principal
         }
       })

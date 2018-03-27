@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-27 10:47:45 pm
+ * Last Modified: 2018-03-28 1:41:35 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -104,7 +104,7 @@ export default {
     }
   },
   created () {
-    this.$router.beforeEach((to, from, next) => {
+    this.$router.afterEach((to, from) => {
       this.menuList.forEach(menu => {
         if (typeof menu.submenu === 'undefined') {
           if (to.name === menu.route) {
@@ -118,7 +118,6 @@ export default {
           })
         }
       })
-      next()
     })
   }
 }
