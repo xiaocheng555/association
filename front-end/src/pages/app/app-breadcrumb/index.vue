@@ -4,13 +4,13 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-26 2:23:30 am
+ * Last Modified: 2018-03-26 10:42:09 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 <template>
   <div class="app-breadcrumb">
-    <el-breadcrumb class="el-breadcrumb" separator-class="el-icon-arrow-right">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
       <div class="fl">您当前的位置： </div>
       <el-breadcrumb-item
         v-for="(item, index) in mapList"

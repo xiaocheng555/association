@@ -1,81 +1,74 @@
 <template>
   <div id="app">
-    <!-- 头部 -->
-    <app-header class="app-header"></app-header>
-    <div class="app-container">
-      <!-- 侧栏导航 -->
-      <div class="app-sidebar">
-        <app-side-nav></app-side-nav>
-      </div>
-      <!-- 主要内容 -->
-      <main class="app-main">
-        <!-- 面包屑 -->
-        <app-breadcrumb class="pd-b15"></app-breadcrumb>
+    <el-container id="app-header-container">
+      <el-header>
+        <app-header></app-header>
+      </el-header>
+    </el-container>
+    <el-container id="app-body-container">
+      <el-aside id="app-aside" width="201px">
+        <app-side-menu></app-side-menu>
+      </el-aside>
+      <el-main id="app-main">
+        <app-breadcrumb></app-breadcrumb>
         <router-view/>
-      </main>
-    </div>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
-import AppHeader from '@common/app-header'
-import AppSideNav from '@common/app-side-nav'
-import AppBreadcrumb from '@common/app-breadcrumb'
+import AppHeader from './app-header'
+import AppSideMenu from './app-side-menu'
+import AppBreadcrumb from './app-breadcrumb'
 
 export default {
   name: 'App',
   components: {
     AppHeader,
-    AppSideNav,
+    AppSideMenu,
     AppBreadcrumb
   }
 }
 </script>
 
-<style>
+<style lang="less">
 /* 重置样式 */
 @import '../../assets/styles/reset.less';
 /* 基础样式 */
 @import '../../assets/styles/base.less';
 /* 字体图标 */
-@import '../../assets/styles/icon.less';
+@import '../../assets/styles/iconfont.less';
+/* 全局样式 */
+@import '../../assets/styles/globle.less';
+/* 全局变量 */
+@import '../../assets/styles/variable.less';
 
 #app {
-  display: block;
   min-width: 900px;
   height: 100%;
-  background-color: #f1f1f1;
+  background-color: #f3f3f3;
 }
 
-.app-header {
+#app-header-container {
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  bottom: 0;
   min-width: 900px;
-  box-sizing: border-box;
+  height: 60px;
+  background-color: #438eb9;
 }
 
-.app-container {
-  display: flex;
+#app-body-container {
+  box-sizing: border-box;
   height: 100%;
   padding-top: 60px;
-  box-sizing: border-box;
 }
 
-.app-sidebar {
-  overflow: auto;
-  width: 200px;
-  height: 100%;
-}
-
-.app-main {
-  overflow: auto;
-  flex: 1;
-  height: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+#app-aside {
+  border-right: solid 1px @default-border-color;
+  background-color: #fff;
 }
 </style>

@@ -2,8 +2,10 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import '@/assets/theme/index.css'
 import App from '@pages/app'
+// import './assets/styles/variable.less'
+require('./assets/styles/variable.less')
 
 Vue.config.productionTip = false
 
