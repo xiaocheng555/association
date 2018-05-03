@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 12:35:37 pm
+ * Last Modified: 2018-05-03 6:36:05 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -66,11 +66,9 @@ exports.update = function (req, res, next) {
   let id = req.body.id
   let name = req.body.name || null
   let content = req.body.content || null
-  let adminId = req.body.adminId
   Notice.update({
     name: name,
-    content: content,
-    adminId: adminId
+    content: content
   }, {
     where: {
       id: id
@@ -107,13 +105,7 @@ exports.detail = async function (req, res, next) {
       content: data.content,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
-      admin: data.admin ? {
-        name: data.admin.name,
-        isSystem: data.admin.isSystem,
-      } : null,
-      association: data.association ? {
-        name: data.association.name
-      } : null
+      principal: data.association ? item.association.name : '系统'
     }
     res.json({
       errorCode: 0,
@@ -132,30 +124,30 @@ exports.detail = async function (req, res, next) {
 */
 exports.list = async function (req, res, next) {
   let associationId = req.query.associationId
+  let adminId = req.query.adminId
+  let where = {}
+  if (typeof associationId !== 'undefined') {
+    where.associationId = associationId
+  }
+  if (typeof adminId !== 'undefined') {
+    where.adminId = adminId
+  }
   // 分页
   pagination(req, Notice, {
-    include: [{
-      model: Admin,
-      include: [{
-        model: Association,
-        where: {
-          id: associationId
-        }
-      }]
-    }]
+    include: [
+      { model: Admin },
+      { model: Association }
+    ],
+    where: where
   }).then(data => {
     data.list.forEach((item, index) => {
       data.list[index] = {
+        id: item.id,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         name: item.name,
-        admin: item.admin ? {
-          name: item.admin.name,
-          isSystem: item.admin.isSystem,
-        } : null,
-        association: item.association ? {
-          name: item.association.name
-        } : null
+        // 发布者
+        principal: item.association ? item.association.name : '系统'
       }
     })
     res.json({

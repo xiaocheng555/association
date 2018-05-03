@@ -34,7 +34,8 @@ export default {
     ...mapMutations(['updateUserInfo'])
   },
   created () {
-
+    let userInfo = window.localStorage.getItem('userInfo')
+    this.updateUserInfo(JSON.parse(userInfo))
   },
   mounted () {
     // this$refs.breadcrumb
@@ -55,7 +56,7 @@ export default {
 @import '../../assets/styles/variable.less';
 
 #app {
-  min-width: 900px;
+  min-width: 1100px;
   height: 100%;
   background-color: #f3f3f3;
 }
@@ -66,7 +67,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  min-width: 900px;
+  min-width: 1100px;
   height: 60px;
   background-color: #438eb9;
 }

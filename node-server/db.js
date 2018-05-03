@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 8:02:12 pm
+ * Last Modified: 2018-05-02 5:07:47 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -41,14 +41,14 @@ db.defineModel = function (name, attributes, options) {
       type: Sequelize.DATE,
       get () {
         let createdTime = this.getDataValue('createdAt')
-        console.log(createdTime)
-        // return createdTime ? createdTime.getTime() : null
-        return this.getDataValue('createdAt').getTime()
+        return createdTime ? createdTime.getTime() : null
       }
     };
     defaultArr.updatedAt = {
       type: Sequelize.DATE,
       get () {
+        // let createdTime = this.getDataValue('createdAt')
+        // return createdTime ? createdTime.getTime() : null
         return this.getDataValue('updatedAt').getTime()
       }
     };

@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-24 8:56:36 pm
+ * Last Modified: 2018-05-04 12:49:58 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -126,15 +126,12 @@ exports.update = function (req, res, next) {
 exports.detail = async function (req, res, next) {
   let id = req.query.id
   Activity.findOne({
-    include: [{
-      model: Admin,
-      include: [Association]
-    }],
+    include: [
+      { model: Admin },
+      { model: Association }
+  ],
     where: {
-      id: id,
-      isDelete: {
-        [Op.ne]: 1
-      }
+      id: id
     }
   }).then(data => {
     let resData = null
@@ -142,15 +139,14 @@ exports.detail = async function (req, res, next) {
       resData = {
         name: data.name,
         content: data.content,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        director: data.director,
+        directorTel: data.directorTel,
+        score: data.score,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
-        admin: data.admin ? {
-          name: data.admin.name,
-          isSystem: data.admin.isSystem,
-        } : null,
-        association: data.association ? {
-          name: data.association.name
-        } : null
+        assoName: data.association ? data.association.name : null
       }
     }
     res.json({
@@ -170,38 +166,49 @@ exports.detail = async function (req, res, next) {
 */
 exports.list = async function (req, res, next) {
   let associationId = req.query.associationId
-  // 分页
-  pagination(req, Activity, {
-    include: [{
-      model: Admin,
-      include: [{
-        model: Association,
-        where: {
-          id: associationId
-        }
-      }]
-    }],
-    where: {
-      isDelete: {
-        [Op.or]: {
-          [Op.ne]: 1,
-          [Op.eq]: null
-        }
+  let approveType = req.query.approveType
+  let assoWhere = {}
+  let actWhere = {
+    isDelete: {
+      [Op.or]: {
+        [Op.ne]: 1,
+        [Op.eq]: null
       }
     }
+  }
+  if (typeof associationId !== 'undefined') {
+    assoWhere.associationId = associationId
+  }
+  if (typeof approveType !== 'undefined') {
+    actWhere.approveType = approveType
+  }
+  // 分页
+  pagination(req, Activity, {
+    include: [
+      { 
+        model: Admin
+      }, 
+      {
+        model: Association,
+        where: assoWhere
+      }
+    ],
+    where: actWhere
   }).then(data => {
     data.list.forEach((item, index) => {
       data.list[index] = {
+        id: item.id,
         name: item.name,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
-        admin: item.admin ? {
-          name: item.admin.name,
-          isSystem: item.admin.isSystem,
-        } : null,
-        association: item.association ? {
-          name: item.association.name
-        } : null
+        startTime: item.startTime,
+        endTime: item.endTime,
+        director: item.director,
+        directorTel: item.directorTel,
+        score: item.score,
+        assoName: item.association ? item.association.name : null,
+        approveType: item.approveType,
+        approveAdvise: item.approveAdvise
       }
       item = null
     })
@@ -221,7 +228,7 @@ exports.list = async function (req, res, next) {
  * 审批活动
 */
 exports.approve = async function (req, res, next) {
-  let id = res.boyd.id
+  let id = req.body.id
   let activity = await Activity.findById(id)  
   if (!activity) {
     return res.json({
@@ -231,7 +238,8 @@ exports.approve = async function (req, res, next) {
   }
   try {
     // 审批类型：0为待审批，1为审批通过，-1为审批驳回
-    activity.approveType = res.boyd.approveType
+    activity.approveType = req.body.approveType
+    activity.approveAdvise = req.body.approveAdvise
     await activity.save()
     res.json({
       errorCode: 0,
@@ -249,7 +257,7 @@ exports.approve = async function (req, res, next) {
  * 确定活动名单
 */
 exports.confirmStudentJoinList = async function (req, res, next) {
-  let id = res.boyd.id
+  let id = req.body.id
   let activity = await Activity.findById(id)
   if (!activity) {
     return res.json({
@@ -259,7 +267,7 @@ exports.confirmStudentJoinList = async function (req, res, next) {
   }
   try {
     // 确定名单类型：0为名单未提交，1为名单提交，2为名单确定成功，-1为名单确定失败
-    activity.confirmType = res.boyd.confirmType
+    activity.confirmType = req.body.confirmType
     await activity.save()
     res.json({
       errorCode: 0,

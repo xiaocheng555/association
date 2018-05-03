@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import HttpService from '@/plugins/service'
-import _config from '@/config/base'
+import HttpApi from '@/http'
 
 Vue.use(HttpService)
 
@@ -8,22 +8,7 @@ Vue.use(HttpService)
 let accessToken = window.localStorage.getItem('accessToken')
 
 // 默认请求配置
-const requestsDefine = [
-  {
-    name: 'student-login',
-    config: {
-      url: _config['server-host'] + 'student/login',
-      method: 'post'
-    }
-  },
-  {
-    name: 'notice-list',
-    config: {
-      url: _config['server-host'] + 'notice/list',
-      method: 'get'
-    }
-  }
-]
+const requestsDefine = HttpApi
 
 // 初始化全局请求拦截器
 HttpService.bootstrap({
@@ -38,8 +23,8 @@ HttpService.bootstrap({
   success: (response, config) => {
     if (response.status === 200) {
       // 如果返回的数据 code 码异常，则提示服务端信息
-      if (response.data.code !== 1) {
-        if (Vue.prototype.$_appToast) Vue.prototype.$_appToast(response.data.msg)
+      if (response.data.errorCode !== 0) {
+        if (Vue.prototype.$message) Vue.prototype.$message.error(response.data.message)
       }
     } else {
       // 如果请求状态不是 200 则提示异常

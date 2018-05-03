@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-22 6:29:38 pm
+ * Last Modified: 2018-05-02 3:47:30 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -193,7 +193,7 @@ exports.login = async function (req, res) {
         id: adminData.id,
         name: adminData.name,
         username: adminData.username,
-        isSystem: adminData.isSystem,
+        isSystem: Boolean(adminData.isSystem),
         associationId: adminData.associationId
       }
     })

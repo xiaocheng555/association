@@ -4,10 +4,11 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-27 8:28:47 pm
+ * Last Modified: 2018-05-03 7:30:13 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
+/* 导航栏组件 */
 .el-menu {
   border-right: 0;
 }
@@ -16,6 +17,46 @@
   min-width: 96px;
 }
 
+/* 面包屑组件 */
 .el-breadcrumb {
   font-size: 12px;
+}
+
+/* 表格组件 */
+.el-table th {
+  background-color: #EDF0F2;
+}
+.el-table td,
+.el-table th {
+  padding: 0;
+  font-size: 12px;
+  .cell {
+    padding: 10px;
+    line-height: 20px !important;
+  }
+}
+.el-table td .cell {
+  margin: -4px 0;
+}
+
+.el-table a {
+  text-decoration: underline;
+  color: #1897F2;
+}
+.table-column__limited {
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 分页组件 */
+.el-pagination {
+  margin-top: 30px;
+  text-align: right;
+}
+
+/* 表单组件 */
+.el-form-item {
+  padding: 5px 0px;
 }

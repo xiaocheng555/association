@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-28 12:04:50 am
+ * Last Modified: 2018-05-03 10:58:36 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -33,17 +33,17 @@
       <div class="login-title text-center">学生登录</div>
       <el-input
         class="login-username"
-        v-model="username"
+        v-model.trim="username"
         placeholder="学号"></el-input>
       <el-input
         class="login-password"
-        v-model="password"
+        v-model.trim="password"
         placeholder="密码"></el-input>
       <div class="login-operate cl">
         <el-checkbox class="choose-role fl" v-model="isAdmin">是否为管理员</el-checkbox>
         <a class="forget-password fr" href="javascript:;">忘记密码？</a>
       </div>
-      <el-button type="primary" class="login-submit" @click.native="userLogin">立即登录</el-button>
+      <el-button type="primary" class="login-submit" @click.native="login">立即登录</el-button>
     </div>
     <!-- 遮罩层 -->
     <div
@@ -69,53 +69,27 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState([
+      'userInfo'
+    ])
   },
   methods: {
+    ...mapMutations(['updateUserInfo', 'resetUserInfo']),
     closeLoginPannel () {
       this.loginPannelShow = false
     },
     showLoginPannel () {
       this.loginPannelShow = true
     },
-    // 用户登录
-    userLogin () {
+    login () {
+      // 验证表单
       if (!this.validateForm()) return
-      this.$store.dispatch('student-login', {
-        data: {
-          user: this.username,
-          password: this.password
-        }
-      }).then(res => {
-        let data = res.data
-        if (res && res.errorCode === 0 && data) {
-          // 关闭登录框
-          this.closeLoginPannel()
-          // 更新store的用户信息
-          this.updateUserInfo({
-            id: data.id,
-            name: data.name,
-            avatar: null
-          })
-          // 重置表单
-          this.username = ''
-          this.password = ''
-          this.$message({
-            message: '登录成功',
-            type: 'success'
-          })
-        } else {
-          this.$message({
-            message: '用户或密码输入不正确',
-            type: 'error'
-          })
-        }
-      }).catch(err => {
-        this.$message({
-          message: err.toString(),
-          type: 'error'
-        })
-      })
+      // 如果是管理员登录
+      if (this.isAdmin) {
+        this.admintLogin()
+      } else {
+        this.studentLogin()
+      }
     },
     // 验证登录表单
     validateForm () {
@@ -134,14 +108,81 @@ export default {
       }
       return true
     },
+    // 学生登录
+    studentLogin () {
+      this.$store.dispatch('student-login', {
+        data: {
+          user: this.username,
+          password: this.password
+        }
+      }).then(res => {
+        let data = res.data
+        if (res && res.errorCode === 0 && data) {
+          // 关闭登录框
+          this.closeLoginPannel()
+          // 更新store的用户信息
+          this.updateUserInfo({
+            id: data.id,
+            name: data.name,
+            avatar: null
+          })
+          // 重置表单
+          this.resetLoginForm()
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '帐号或密码输入不正确',
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 管理员登录
+    admintLogin () {
+      this.$store.dispatch('admin-login', {
+        data: {
+          username: this.username,
+          password: this.password
+        }
+      }).then(res => {
+        if (res && res.errorCode === 0 && res.data) {
+          let data = res.data
+          // 关闭登录框
+          this.closeLoginPannel()
+          // 更新store的用户信息
+          this.updateUserInfo({
+            id: data.id,
+            name: data.name,
+            avatar: null,
+            isAdmin: true,
+            isSystem: data.isSystem,
+            assoId: data.associationId
+          })
+          this.resetLoginForm()
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '帐号或密码输入不正确',
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 重置表单
+    resetLoginForm () {
+      this.username = ''
+      this.password = ''
+    },
     // 用户退出登录
     userLogout () {
       setTimeout(() => {
-        this.updateUserInfo({
-          id: null,
-          name: null,
-          avatar: null
-        })
+        this.resetUserInfo()
         this.$router.push({
           name: 'home'
         })
@@ -150,11 +191,10 @@ export default {
           message: '退出成功'
         })
       }, 200)
-    },
-    ...mapMutations(['updateUserInfo'])
+    }
   },
   created () {
-    console.log(window.localStorage.getItem('id'), '123')
+
   }
 }
 </script>

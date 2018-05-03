@@ -1,7 +1,11 @@
 export default {
   userInfo: {
     id: null,
-    name: '张焕城',
-    avatar: null
-  }
+    name: '',
+    avatar: null,
+    isAdmin: false,
+    isSystem: false,
+    assoId: null
+  },
+  pageSize: 10
 }
