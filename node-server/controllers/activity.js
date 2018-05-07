@@ -4,12 +4,12 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-04 12:49:58 am
+ * Last Modified: 2018-05-05 9:15:29 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 const Op = require('sequelize').Op
-const { Activity, Association, Admin, Student } = require('../models')
+const { Activity, Association, Admin, Student, StudentActivity } = require('../models')
 const pagination = require('../ulits/pagination.js')
 
 /* 
@@ -167,7 +167,7 @@ exports.detail = async function (req, res, next) {
 exports.list = async function (req, res, next) {
   let associationId = req.query.associationId
   let approveType = req.query.approveType
-  let assoWhere = {}
+  let confirmType = req.query.confirmType
   let actWhere = {
     isDelete: {
       [Op.or]: {
@@ -177,10 +177,13 @@ exports.list = async function (req, res, next) {
     }
   }
   if (typeof associationId !== 'undefined') {
-    assoWhere.associationId = associationId
+    actWhere.associationId = associationId
   }
   if (typeof approveType !== 'undefined') {
     actWhere.approveType = approveType
+  }
+  if (typeof confirmType !== 'undefined') {
+    actWhere.confirmType = confirmType
   }
   // 分页
   pagination(req, Activity, {
@@ -189,8 +192,7 @@ exports.list = async function (req, res, next) {
         model: Admin
       }, 
       {
-        model: Association,
-        where: assoWhere
+        model: Association
       }
     ],
     where: actWhere
@@ -208,7 +210,9 @@ exports.list = async function (req, res, next) {
         score: item.score,
         assoName: item.association ? item.association.name : null,
         approveType: item.approveType,
-        approveAdvise: item.approveAdvise
+        approveAdvise: item.approveAdvise,
+        confirmType: item.confirmType,
+        confirmAdvise: item.confirmAdvise
       }
       item = null
     })
@@ -228,8 +232,8 @@ exports.list = async function (req, res, next) {
  * 审批活动
 */
 exports.approve = async function (req, res, next) {
-  let id = req.body.id
-  let activity = await Activity.findById(id)  
+  let activityId = req.body.activityId
+  let activity = await Activity.findById(activityId)  
   if (!activity) {
     return res.json({
       errorCode: 2108,
@@ -254,11 +258,11 @@ exports.approve = async function (req, res, next) {
 }
 
 /* 
- * 确定活动名单
+ * 审批活动名单
 */
-exports.confirmStudentJoinList = async function (req, res, next) {
-  let id = req.body.id
-  let activity = await Activity.findById(id)
+exports.approveStudentList = async function (req, res, next) {
+  let activityId = req.body.activityId
+  let activity = await Activity.findById(activityId)
   if (!activity) {
     return res.json({
       errorCode: 2108,
@@ -268,6 +272,7 @@ exports.confirmStudentJoinList = async function (req, res, next) {
   try {
     // 确定名单类型：0为名单未提交，1为名单提交，2为名单确定成功，-1为名单确定失败
     activity.confirmType = req.body.confirmType
+    activity.confirmAdvise = req.body.confirmAdvise
     await activity.save()
     res.json({
       errorCode: 0,
@@ -294,11 +299,6 @@ exports.studentJoinList = async function (req, res, next) {
         id: activityId
       },
       through: {}
-      // through: {
-      //   where: {
-      //     id: 5
-      //   }
-      // }
     }]
   })
   if (resData.list.length > 0) {
@@ -309,5 +309,52 @@ exports.studentJoinList = async function (req, res, next) {
   res.json({
     errorCode: 0,
     data: resData
+  })
+}
+
+/* 
+ * 删除学生名单的学生
+*/
+exports.deleteStudentInList = function (req, res, next) {
+  let studentId = req.body.studentId
+  StudentActivity.destroy({
+    where: {
+      studentId: studentId
+    }
+  }).then(data => {
+    res.json({
+      errorCode: 0,
+      data: '学生删除成功'
+    })
+  }).catch(err => {
+    res.json({
+      errorCode: 2210,
+      message: '学生删除失败'
+    })
+  })
+}
+
+/* 
+ * 批量添加学生名单的学生
+*/
+exports.addStudentInList = function (req, res, next) {
+  let studentIds = req.body.studentIds
+  let activityId = req.body.activityId
+  let createList = studentIds.map(id => {
+    return {
+      studentId: id,
+      activityId: activityId
+    }
+  })
+  StudentActivity.bulkCreate(createList).then(data => {
+    res.json({
+      errorCode: 0,
+      data: '学生添加成功'
+    })
+  }).catch(err => {
+    res.json({
+      errorCode: 2220,
+      message: '学生添加失败'
+    })
   })
 }

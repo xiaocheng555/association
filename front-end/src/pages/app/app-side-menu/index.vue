@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-03 7:46:14 pm
+ * Last Modified: 2018-05-07 10:54:23 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -106,7 +106,7 @@ export default {
             },
             {
               index: '5-3',
-              route: 'admin-association-list',
+              route: 'admin-association-manage',
               name: '社团管理'
             }
           ]
@@ -127,12 +127,12 @@ export default {
             },
             {
               index: '6-2',
-              route: 'activity-approve-list',
+              route: 'activity-approve',
               name: '活动审批'
             },
             {
               index: '6-3',
-              route: 'admin-association-list',
+              route: 'admin-association-add',
               name: '社团管理'
             }
           ]

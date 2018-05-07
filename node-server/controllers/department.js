@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-03-23 2:06:59 pm
+ * Last Modified: 2018-05-07 2:43:02 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -38,7 +38,7 @@ exports.create = function (req, res, next) {
 * 删除部门
 */
 exports.destroy = function (req, res, next) {
-  let id = req.body.id
+  let id = req.body.departmentId
   Department.destroy({
     where: {
       id: id
@@ -67,7 +67,7 @@ exports.destroy = function (req, res, next) {
  * 更新部门
 */
 exports.save = async function (req, res, next) {
-  let id = req.body.id
+  let id = req.body.departmentId
   let department = await Department.findById(id)
   if (!department) {
     res.json({
@@ -88,7 +88,7 @@ exports.save = async function (req, res, next) {
  * 获取部门详情
 */
 exports.detail = function (req, res) {
-  let id = req.query.id
+  let id = req.query.departmentId
   Department.findById(id).then(data => {
     res.json({
       errorCode: 0,
@@ -101,7 +101,12 @@ exports.detail = function (req, res) {
  * 获取部门列表
 */
 exports.list = function (req, res, next) {
-  Department.findAll().then(data => {
+  let associationId = req.query.associationId
+  Department.findAll({
+    where: {
+      associationId: associationId
+    }
+  }).then(data => {
     res.json({
       errorCode: 0,
       data: data

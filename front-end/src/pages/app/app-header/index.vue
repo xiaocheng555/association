@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-03 10:58:36 am
+ * Last Modified: 2018-05-06 11:27:56 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -20,7 +20,7 @@
           <span>{{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i></span>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人中心</el-dropdown-item>
+          <el-dropdown-item v-if="!userInfo.isAdmin" @click.native="jumpToUser">个人中心</el-dropdown-item>
           <el-dropdown-item @click.native="userLogout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -191,6 +191,11 @@ export default {
           message: '退出成功'
         })
       }, 200)
+    },
+    jumpToUser () {
+      this.$router.push({
+        name: 'user'
+      })
     }
   },
   created () {

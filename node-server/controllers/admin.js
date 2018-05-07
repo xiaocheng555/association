@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-02 3:47:30 pm
+ * Last Modified: 2018-05-07 2:54:43 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -65,7 +65,7 @@ exports.create = function (req, res, next) {
  * 删除管理员
 */
 exports.destroy = function (req, res, next) {
-  let id = req.body.id
+  let id = req.body.adminId
   Admin.destroy({
     where: {
       id: id
@@ -94,7 +94,7 @@ exports.destroy = function (req, res, next) {
  * 更新管理员
 */
 exports.update = function (req, res, next) {
-  let id = req.body.id
+  let id = req.body.adminId
   let name = req.body.name
   let password = req.body.password
   Admin.update({
@@ -135,23 +135,14 @@ exports.detail = function (req, res) {
  * 获取管理员列表
 */
 exports.list = async function (req, res, next) {
+  let associationId = req.query.associationId
+  console.log(associationId)
   // 分页
-  pagination(req, Admin, {
-    include: [{
-      model: Association
-    }]
+  Admin.findAll({
+    where: {
+      associationId: associationId
+    }
   }).then(data => {
-    data.list.forEach((item, index) => {
-      data.list[index] = {
-        name: item.name,
-        username: item.username,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-        association: item.association ? {
-          name: item.association.name
-        } : null
-      }
-    })
     res.json({
       errorCode: 0,
       data: data

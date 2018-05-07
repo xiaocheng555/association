@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-03 7:27:57 pm
+ * Last Modified: 2018-05-07 11:26:27 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -99,7 +99,6 @@ export default {
     },
     // 获取列表数据
     fetchNoticeList () {
-      console.log(this.userInfo.isSystem, typeof this.userInfo.isSystem, '123')
       this.$store.dispatch('notice-list', {
         params: {
           pageSize: this.pageSize,
@@ -113,11 +112,6 @@ export default {
           let data = res.data
           this.totalCount = data.totalCount
           this.noticeList = this.handleListData(res.data.list)
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取公告列表失败'
-          })
         }
       })
     },

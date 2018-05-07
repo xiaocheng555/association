@@ -4,25 +4,36 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-04-02 12:59:20 pm
+ * Last Modified: 2018-05-05 9:38:50 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 <template>
-  <div class="association-list-page">
+  <div class="association-list">
     <common-pannel title="社团">
-      <div class="association-list">
-        <el-row :gutter="20">
-          <el-col
-            v-for="(item, index) in associationList"
-            :span="8"
-            :key="index">
-            <div>
-              {{ item.name }}
+      <el-row :gutter="30">
+        <el-col
+          class="association-list-item"
+          v-for="item in associationList"
+          :span="8"
+          :sm="8"
+          :md="8"
+          :lg="6"
+          :key="item.id">
+          <el-card
+            class="association-card"
+            :body-style="{ padding: '0px' }"
+            :alt="item.name"
+            @click.native="jumpToAssoDetail(item)">
+            <img class="association-image" src="../../../assets/images/user.jpg">
+            <div style="padding: 14px;">
+              <span>{{ item.name }}</span>
             </div>
-          </el-col>
-        </el-row>
-      </div>
+          </el-card>
+        </el-col>
+      </el-row>
       <el-pagination
+        class="association-list-pagination"
+        background
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
         :page-size="pageSize"
@@ -96,6 +107,15 @@ export default {
           name: item.name
         }
       })
+    },
+    jumpToAssoDetail (item) {
+      this.$router.push({
+        name: 'association-detail',
+        query: {
+          id: item.id,
+          name: item.name
+        }
+      })
     }
   },
   created () {
@@ -104,6 +124,26 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.association-list {
+  .association-list-item {
+    margin-bottom: 30px;
+  }
 
+  .association-card {
+    cursor: pointer;
+  }
+
+  .association-image {
+    width: 100%;
+    height: 200px;
+    display: block;
+  }
+
+  .association-list-pagination {
+    margin-top: 10px;
+    padding-bottom: 20px;
+    text-align: center;
+  }
+}
 </style>

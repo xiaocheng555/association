@@ -4,24 +4,24 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-04 1:12:55 am
+ * Last Modified: 2018-05-04 5:47:13 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 <template>
-  <common-pannel title="审批详情">
+  <common-pannel title="审批学生名单">
     <form class="approve-form">
       <h5 class="approve-title">审批意见：</h5>
       <div class="approve-radio-box">
-        <el-radio v-model="approveType" label="1">同意</el-radio>
-        <el-radio v-model="approveType" label="-1">驳回</el-radio>
+        <el-radio v-model="confirmType" label="2">同意</el-radio>
+        <el-radio v-model="confirmType" label="-1">驳回</el-radio>
       </div>
       <el-input
         class="approve-advise"
-        v-show="approveType === '-1'"
+        v-show="confirmType === '-1'"
         v-model="advise"
         type="textarea"
-        placeholder="请输入驳回意见（最多500字）"
+        placeholder="请输入驳回原因（最多500字）"
         :rows="4"
         :maxlength="10">
       </el-input>
@@ -31,7 +31,10 @@
         size="mini"
         @click="submitApproveForm">提交</el-button>
     </form>
-    <ActivityArticle class="approve-content" :article="activityDeatil"></ActivityArticle>
+    <div class="approve-content-box">
+      <h5 class="approve-content-title">活动详情：</h5>
+      <ActivityArticle class="approve-content" :article="activityDeatil"></ActivityArticle>
+    </div>
   </common-pannel>
 </template>
 
@@ -41,7 +44,7 @@ import CommonPannel from '@common/common-pannel'
 import ActivityArticle from '@common/activity-article'
 
 export default {
-  name: 'activity-detail',
+  name: 'approve-student-list',
   components: {
     CommonPannel,
     ActivityArticle
@@ -60,7 +63,7 @@ export default {
         content: ''
       },
       activityId: null,
-      approveType: 0,
+      confirmType: '2',
       advise: ''
     }
   },
@@ -88,16 +91,20 @@ export default {
       this.activityDeatil.content = data.content
     },
     submitApproveForm () {
-      this.$store.dispatch('activity-approve', {
+      this.$store.dispatch('activity-approve-student-list', {
         data: {
-          approveType: this.approveType,
-          id: this.activityId
+          activityId: this.activityId,
+          confirmType: this.confirmType,
+          confirmAdvise: this.advise
         }
       }).then(res => {
         if (res && res.errorCode === 0) {
-          this.$message.success('活动审批成功')
+          this.$message.success('学生名单审批成功')
           this.$router.push({
-            name: 'activity-approve-list'
+            name: 'activity-approve',
+            query: {
+              tab: 'student'
+            }
           })
         }
       })
@@ -140,7 +147,18 @@ export default {
   }
 }
 
-.approve-content {
-  padding-top: 25px;
+.approve-content-box {
+
+  .approve-content-title {
+    padding-top: 30px;
+    padding-bottom: 5px;
+    font-size: 14px;
+  }
+
+  .approve-content {
+    padding: 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+  }
 }
 </style>
