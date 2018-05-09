@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-05 10:48:54 pm
+ * Last Modified: 2018-05-08 10:41:04 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -12,12 +12,18 @@
   <div class="app-breadcrumb">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <div class="location fl">您的位置： </div>
-      <el-breadcrumb-item
-        v-for="(item, index) in mapList"
-        :key="index"
-        :to="setRoute(item)">
-       {{ item.name }}
-      </el-breadcrumb-item>
+      <template v-for="(item, index) in mapList">
+        <el-breadcrumb-item
+          :key="index"
+          :to="setRoute(item)">
+          {{ item.name }}
+        </el-breadcrumb-item>
+        <!-- <el-breadcrumb-item
+          v-else
+          :key="index">
+          {{ item.name }}
+        </el-breadcrumb-item> -->
+      </template>
     </el-breadcrumb>
   </div>
 </template>
@@ -47,20 +53,15 @@ export default {
           }
           let mapListTemp = JSON.parse(JSON.stringify(currBreadcrumb))
           // 将面包屑最后一个路由设置为空，效果->点击该路由不跳转
-          mapListTemp[mapListTemp.length - 1].route = ''
           this.mapList = mapListTemp
         }
       }
     },
     setRoute (item) {
-      if (item.route === '') {
-        return ''
-      } else {
-        return {
-          name: item.route,
-          query: item.query ? item.query : {},
-          params: item.params ? item.params : {}
-        }
+      return {
+        name: item.route,
+        query: item.query ? item.query : {},
+        params: item.params ? item.params : {}
       }
     }
   },

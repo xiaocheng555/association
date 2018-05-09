@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-06 7:49:48 pm
+ * Last Modified: 2018-05-08 7:32:53 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -20,7 +20,10 @@ export default [
     path: '/user',
     component: UserIndex,
     redirect: {
-      name: 'user-info'
+      name: 'user-info',
+      query: {
+        state: 'info'
+      }
     },
     children: [
       {

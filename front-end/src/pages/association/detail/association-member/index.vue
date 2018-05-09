@@ -1,37 +1,38 @@
 /*
  * File: index.vue
- * File Created: 2018-03-27 10:39:07 pm
+ * File Created: 2018-05-05 8:59:44 pm
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-08 5:02:42 pm
+ * Last Modified: 2018-05-07 4:40:38 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 <template>
-  <common-pannel title="学生名单">
+  <div>
     <el-table
+      class="member-list"
       style="width: 100%"
-      class="student-list"
       align="center"
-      :data="studentList"
+      :data="memberList"
       :stripe="true"
       :border="true">
       <el-table-column
         prop="name"
         align="center"
-        width="180"
+        width="150"
         label="姓名">
       </el-table-column>
       <el-table-column
         prop="sno"
         align="center"
-        width="180"
+        width="150"
         label="学号">
       </el-table-column>
       <el-table-column
         prop="class"
         align="center"
+        width="200"
         label="班级">
       </el-table-column>
       <el-table-column
@@ -42,7 +43,7 @@
       <el-table-column
         prop="grade"
         align="center"
-        width="120"
+        width="100"
         label="年级">
       </el-table-column>
     </el-table>
@@ -54,29 +55,25 @@
       layout="prev, pager, next, jumper"
       :total="totalCount">
     </el-pagination>
-  </common-pannel>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CommonPannel from '@common/common-pannel'
 
 export default {
-  name: 'activity-student-list',
-  components: {
-    CommonPannel
-  },
+  name: 'association-member',
   props: {
-    actId: {
-      type: Number
+    assoId: {
+      type: Number,
+      required: true
     }
   },
   data () {
     return {
+      memberList: [],
       currentPage: 1,
-      totalCount: 1,
-      studentList: [],
-      dialogShow: false
+      totalCount: 0
     }
   },
   computed: {
@@ -85,6 +82,33 @@ export default {
     ])
   },
   methods: {
+    fetchMemberList () {
+      this.$store.dispatch('association-student-join-list', {
+        params: {
+          pageSize: this.pageSize,
+          pageNum: this.currentPage,
+          associationId: this.assoId,
+          joinStatus: 1
+        }
+      }).then(res => {
+        if (res && res.errorCode === 0 && res.data) {
+          this.totalCount = res.data.totalCount
+          this.memberList = this.handleMemberList(res.data.list)
+        }
+      })
+    },
+    handleMemberList (listData) {
+      return listData.map(item => {
+        return {
+          id: item.id,
+          name: item.name,
+          sno: item.sno,
+          class: item.name,
+          academy: item.name,
+          grade: item.grade
+        }
+      })
+    },
     // 跳转到第几页
     handleCurrentChange (currentPage) {
       this.$router.push({
@@ -92,53 +116,10 @@ export default {
           currentPage
         }
       })
-    },
-    // 获取列表数据
-    fetchStudentList () {
-      this.$store.dispatch('activity-student-join-list', {
-        params: {
-          activityId: this.actId
-        }
-      }).then((res) => {
-        if (res && res.data && res.errorCode === 0) {
-          let data = res.data
-          this.totalCount = data.totalCount
-          this.studentList = this.handleListData(res.data.list)
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取活动列表失败'
-          })
-        }
-      })
-    },
-    handleListData (listData) {
-      return listData.map(item => {
-        return {
-          id: item.id,
-          name: item.name,
-          sno: item.sno,
-          sex: item.sex,
-          class: item.class,
-          academy: item.academy,
-          grade: item.grade
-        }
-      })
     }
   },
-  // 当路由参数改变时调用
-  beforeRouteUpdate (to, from, next) {
-    this.fetchStudentList()
-    next()
-  },
   created () {
-    this.fetchStudentList()
+    this.fetchMemberList()
   }
 }
 </script>
-
-<style lang="less" scoped>
-.student-list {
-  margin-top: 15px;
-}
-</style>

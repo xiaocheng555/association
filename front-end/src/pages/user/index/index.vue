@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-06 11:26:04 pm
+ * Last Modified: 2018-05-08 7:37:22 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -103,6 +103,11 @@ export default {
           state: state
         }
       })
+    }
+  },
+  watch: {
+    '$route.query.state' (newVal) {
+      this.activeNavState = newVal
     }
   },
   created () {

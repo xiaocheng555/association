@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-04 4:09:55 pm
+ * Last Modified: 2018-05-08 11:49:18 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -79,6 +79,20 @@ export default [
     config: {
       url: _config['server-host'] + 'activity/approve-student-list',
       method: 'post'
+    }
+  },
+  {
+    name: 'activity-student-join-act-list',
+    config: {
+      url: _config['server-host'] + 'activity/student-join-act-list',
+      method: 'get'
+    }
+  },
+  {
+    name: 'activity-student-join-ids',
+    config: {
+      url: _config['server-host'] + 'activity/student-join-ids',
+      method: 'get'
     }
   }
 ]

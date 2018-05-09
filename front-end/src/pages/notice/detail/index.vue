@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-03 7:22:41 pm
+ * Last Modified: 2018-05-08 10:43:06 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -49,7 +49,6 @@ export default {
           id: id
         }
       }).then((res) => {
-        console.log(res)
         if (res && res.data && res.errorCode === 0) {
           this.setNoticeDeatil(res.data)
         }

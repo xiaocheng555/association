@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 2:45:09 pm
+ * Last Modified: 2018-05-07 5:14:32 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -16,8 +16,8 @@ const activityDetail = () => import('@admin/activity/detail')
 const activityAdd = () => import('@admin/activity/add')
 const activityEdit = () => import('@admin/activity/edit')
 const activityApprove = () => import('@admin/activity/approve')
-const activityApproveActivity = () => import('@admin/activity/approve/approve-activity')
-const activityApproveStudent = () => import('@admin/activity/approve/approve-student-list')
+const activityApproveActivityDetail = () => import('@admin/activity/approve/approve-activity-detail')
+const activityApproveStudentDetail = () => import('@admin/activity/approve/approve-student-detail')
 const activityStudentConfirm = () => import('@admin/activity/student-confirm')
 const activityStudentList = () => import('@admin/activity/student-list')
 const associationAdd = () => import('@admin/association/add')
@@ -78,14 +78,14 @@ export default [
     component: activityApprove
   },
   {
-    name: 'activity-approve-activity',
-    path: '/admin/activity/approve-activity',
-    component: activityApproveActivity
+    name: 'activity-approve-activity-detail',
+    path: '/admin/activity/approve-activity-detail',
+    component: activityApproveActivityDetail
   },
   {
-    name: 'activity-approve-student',
-    path: '/admin/activity/approve-student-list',
-    component: activityApproveStudent
+    name: 'activity-approve-student-detail',
+    path: '/admin/activity/approve-student-list-detail',
+    component: activityApproveStudentDetail
   },
   {
     name: 'activity-student-confirm',

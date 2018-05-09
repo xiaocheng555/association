@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-04 3:53:44 pm
+ * Last Modified: 2018-05-08 9:44:40 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -25,7 +25,7 @@ const Activity = db.defineModel('activity', {
     type: Sequelize.DATE
   },
   score: {
-    type: Sequelize.DECIMAL(4, 2)
+    type: Sequelize.DECIMAL(4, 1)
   },
   director: {
     type: Sequelize.STRING(50)

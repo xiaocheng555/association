@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 2:57:49 pm
+ * Last Modified: 2018-05-08 11:54:44 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -77,7 +77,11 @@
       title="添加学生"
       :visible.sync="dialogShow"
       width="1100px">
-      <student-choose @confirm="addStudentList"></student-choose>
+      <student-choose
+        v-if="dialogShow"
+        :checked-student-ids="checkedStudentIds"
+        :disabled-student-ids="checkedStudentIds"
+        @confirm="addStudentList"></student-choose>
     </el-dialog>
   </common-pannel>
 </template>
@@ -103,7 +107,8 @@ export default {
       currentPage: 1,
       totalCount: 1,
       studentList: [],
-      dialogShow: false
+      dialogShow: false,
+      checkedStudentIds: []
     }
   },
   computed: {
@@ -131,11 +136,18 @@ export default {
           let data = res.data
           this.totalCount = data.totalCount
           this.studentList = this.handleListData(res.data.list)
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取活动列表失败'
-          })
+        }
+      })
+    },
+    // 获取列表数据
+    fetchCheckedStudentIds () {
+      this.$store.dispatch('activity-student-join-ids', {
+        params: {
+          activityId: this.actId
+        }
+      }).then((res) => {
+        if (res && res.data && res.errorCode === 0) {
+          this.checkedStudentIds = res.data
         }
       })
     },
@@ -212,6 +224,7 @@ export default {
   },
   created () {
     this.fetchStudentList()
+    this.fetchCheckedStudentIds()
   }
 }
 </script>

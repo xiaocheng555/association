@@ -36,9 +36,6 @@ export default {
   created () {
     let userInfo = window.localStorage.getItem('userInfo')
     this.updateUserInfo(JSON.parse(userInfo))
-  },
-  mounted () {
-    // this$refs.breadcrumb
   }
 }
 </script>

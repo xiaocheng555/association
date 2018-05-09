@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 3:31:18 pm
+ * Last Modified: 2018-05-08 11:32:05 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -65,6 +65,20 @@ export default [
     config: {
       url: _config['server-host'] + 'association/delete-student-join',
       method: 'post'
+    }
+  },
+  {
+    name: 'association-student-join-asso-list',
+    config: {
+      url: _config['server-host'] + 'association/student-join-asso-list',
+      method: 'get'
+    }
+  },
+  {
+    name: 'association-student-join-ids-list',
+    config: {
+      url: _config['server-host'] + 'association/student-join-ids-list',
+      method: 'get'
     }
   }
 ]

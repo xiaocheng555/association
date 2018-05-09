@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-04 5:20:50 pm
+ * Last Modified: 2018-05-07 5:13:42 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -112,7 +112,7 @@ export default {
     },
     jumpToApproveDetail (id) {
       this.$router.push({
-        name: 'activity-approve-student',
+        name: 'activity-approve-student-detail',
         query: {
           id: id
         }

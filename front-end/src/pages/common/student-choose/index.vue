@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 4:33:38 pm
+ * Last Modified: 2018-05-08 11:44:36 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -53,7 +53,10 @@
         align="center"
         width="150">
         <template slot-scope="scope">
-          <el-checkbox v-model="scope.row.checked" @change="checkStudent(scope.row)"></el-checkbox>
+          <el-checkbox
+            v-model="scope.row.checked"
+            :disabled="scope.row.disabled"
+            @change="checkStudent(scope.row)"></el-checkbox>
         </template>
       </el-table-column>
     </el-table>
@@ -76,6 +79,20 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'student-choose',
+  props: {
+    disabledStudentIds: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    checkedStudentIds: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    }
+  },
   data () {
     return {
       snoText: '',
@@ -112,11 +129,17 @@ export default {
     },
     handleStudentList (listData) {
       return listData.map(item => {
-        let checked = this.studentCheckedList.some(checkedStudent => {
-          if (checkedStudent.id === item.id) {
+        let disabled = this.disabledStudentIds.some(disabledId => {
+          if (disabledId === item.id) {
             return true
           }
         })
+        let checked = this.checkedStudentIds.some(checkedId => {
+          if (checkedId === item.id) {
+            return true
+          }
+        })
+        console.log(this.checkedStudentIds, 'this.checkedStudentIds')
         return {
           id: item.id,
           name: item.name,
@@ -124,7 +147,8 @@ export default {
           class: item.name,
           academy: item.name,
           grade: item.grade,
-          checked: checked
+          checked: checked,
+          disabled: disabled
         }
       })
     },

@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-05 12:19:10 am
+ * Last Modified: 2018-05-08 4:34:45 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -144,7 +144,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'pageSize'
+      'pageSize',
+      'userInfo'
     ])
   },
   methods: {
@@ -161,7 +162,8 @@ export default {
       this.$store.dispatch('activity-list', {
         params: {
           pageSize: this.pageSize,
-          pageNum: this.currentPage
+          pageNum: this.currentPage,
+          assoId: this.userInfo.assoId
         }
       }).then((res) => {
         if (res && res.data && res.errorCode === 0) {

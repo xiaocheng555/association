@@ -4,11 +4,12 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-05 9:15:29 pm
+ * Last Modified: 2018-05-08 4:36:36 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 const Op = require('sequelize').Op
+const sequelize = require('../db').sequelize;
 const { Activity, Association, Admin, Student, StudentActivity } = require('../models')
 const pagination = require('../ulits/pagination.js')
 
@@ -168,6 +169,7 @@ exports.list = async function (req, res, next) {
   let associationId = req.query.associationId
   let approveType = req.query.approveType
   let confirmType = req.query.confirmType
+  let assoId = req.query.assoId
   let actWhere = {
     isDelete: {
       [Op.or]: {
@@ -176,6 +178,7 @@ exports.list = async function (req, res, next) {
       }
     }
   }
+  let assoWhere = {}
   if (typeof associationId !== 'undefined') {
     actWhere.associationId = associationId
   }
@@ -185,6 +188,9 @@ exports.list = async function (req, res, next) {
   if (typeof confirmType !== 'undefined') {
     actWhere.confirmType = confirmType
   }
+  if (typeof assoId !== 'undefined') {
+    assoWhere.id = assoId
+  }
   // 分页
   pagination(req, Activity, {
     include: [
@@ -192,7 +198,8 @@ exports.list = async function (req, res, next) {
         model: Admin
       }, 
       {
-        model: Association
+        model: Association,
+        where: assoWhere
       }
     ],
     where: actWhere
@@ -313,6 +320,31 @@ exports.studentJoinList = async function (req, res, next) {
 }
 
 /* 
+ * 所有参与活动的学生id
+*/
+exports.studentJoinIds = async function (req, res, next) {
+  let activityId = req.query.activityId
+  // 分页
+  let studentList = await Student.findAll({
+    include: [{
+      model: Activity,
+      where: {
+        id: activityId
+      },
+      through: {}
+    }]
+  })
+  let ids = []
+  studentList.forEach(student => {
+    ids.push(student.id)
+  })
+  res.json({
+    errorCode: 0,
+    data: ids
+  })
+}
+
+/* 
  * 删除学生名单的学生
 */
 exports.deleteStudentInList = function (req, res, next) {
@@ -355,6 +387,61 @@ exports.addStudentInList = function (req, res, next) {
     res.json({
       errorCode: 2220,
       message: '学生添加失败'
+    })
+  })
+}
+
+/*
+ * 获取学生参加的活动列表
+*/
+exports.studentJoinActList = async function (req, res, next) {
+  let studentId = req.query.studentId
+  let actWhere = {
+    isDelete: {
+      [Op.or]: {
+        [Op.ne]: 1,
+        [Op.eq]: null
+      }
+    },
+    approveType: 1,
+    confirmType: 2
+  }
+  // 分页
+  pagination(req, Activity, {
+    include: [{
+      model: Student,
+      where: {
+        id: studentId
+      },
+      through: {}
+    }, {
+      model: Association
+    }],
+    where: actWhere
+  }).then(data => {
+    data.list.forEach((item, index) => {
+      data.list[index] = {
+        id: item.id,
+        name: item.name,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        director: item.director,
+        directorTel: item.directorTel,
+        score: item.score,
+        assoName: item.association ? item.association.name : null
+      }
+      item = null
+    })
+    res.json({
+      errorCode: 0,
+      data: data
+    })
+  }).catch(error => {
+    res.json({
+      errorCode: 2005,
+      message: error
     })
   })
 }

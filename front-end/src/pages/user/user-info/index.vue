@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-06 8:54:14 pm
+ * Last Modified: 2018-05-08 2:39:08 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -19,12 +19,6 @@
       </li>
       <li class="user-info-item">
         <label class="user-info-label">学 号：</label> {{ studentInfo.sno }}
-      </li>
-      <li class="user-info-item">
-        <label class="user-info-label">性 别：</label> {{ studentInfo.sex }}
-      </li>
-      <li class="user-info-item">
-        <label class="user-info-label">年 龄：</label> {{ studentInfo.age }}
       </li>
       <li class="user-info-item">
         <label class="user-info-label">班 级：</label> {{ studentInfo.class }}
@@ -100,7 +94,7 @@ export default {
 }
 
 .user-info-item {
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 
 .user-info-label {

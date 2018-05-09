@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 3:33:44 pm
+ * Last Modified: 2018-05-08 4:07:11 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -68,7 +68,11 @@
       title="添加会员"
       :visible.sync="dialogShow"
       width="1100px">
-      <student-choose @confirm="addMemberList"></student-choose>
+      <student-choose
+        :checked-student-ids="checkedStudentIds"
+        :disabled-student-ids="checkedStudentIds"
+        @confirm="addMemberList"
+        v-if="dialogShow"></student-choose>
     </el-dialog>
   </div>
 </template>
@@ -87,7 +91,8 @@ export default {
       memberList: [],
       currentPage: 1,
       totalCount: 0,
-      dialogShow: false
+      dialogShow: false,
+      checkedStudentIds: []
     }
   },
   computed: {
@@ -109,6 +114,19 @@ export default {
         if (res && res.errorCode === 0 && res.data) {
           this.totalCount = res.data.totalCount
           this.memberList = this.handleMemberList(res.data.list)
+        }
+      })
+    },
+    fetchCheckedMemberIds () {
+      this.$store.dispatch('association-student-join-ids-list', {
+        params: {
+          associationId: this.userInfo.assoId,
+          joinStatus: 1
+        }
+      }).then(res => {
+        if (res && res.errorCode === 0 && res.data) {
+          this.checkedStudentIds = res.data
+          console.log(this.checkedStudentIds)
         }
       })
     },
@@ -144,6 +162,7 @@ export default {
           this.$message.success('添加成功！')
           this.dialogShow = false
           this.fetchMemberList()
+          this.fetchCheckedMemberIds()
         }
       })
     },
@@ -173,6 +192,7 @@ export default {
   },
   created () {
     this.fetchMemberList()
+    this.fetchCheckedMemberIds()
   }
 }
 </script>

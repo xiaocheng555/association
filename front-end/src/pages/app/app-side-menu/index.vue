@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 10:54:23 am
+ * Last Modified: 2018-05-08 4:43:10 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -17,7 +17,7 @@
         v-for="(item, index) in menuList">
         <!-- 一级导航 -->
         <el-menu-item
-          v-if="!item.submenus"
+          v-if="!item.submenus && isShowItem(item.show)"
           :key="index"
           :index="item.index">
           <router-link :to="{ name: item.route }" tag="p">
@@ -26,7 +26,7 @@
           </router-link>
         </el-menu-item>
         <!-- 二级导航、社团管理员 -->
-        <template v-if="item.show">
+        <template v-if="item.submenus && isShowItem(item.show)">
           <el-submenu
             :key="index"
             :index="item.index">
@@ -56,6 +56,7 @@ export default {
   name: 'app-side-menu',
   data () {
     let userInfo = this.$store.state.userInfo
+    let isLogin = userInfo.id !== null
     let isAdmin = userInfo.id && userInfo.isAdmin
     let isSystemAdmin = userInfo.isSystem
     return {
@@ -85,40 +86,22 @@ export default {
           icon: 'iconfont icon-team',
           name: '社团'
         },
-        // 社团管理员
         {
           index: '5',
-          route: null,
-          icon: 'iconfont icon-setting',
-          name: '后台管理',
-          show: isAdmin && !isSystemAdmin,
-          state: 'assoAdmin',
-          submenus: [
-            {
-              index: '5-1',
-              route: 'admin-notice-list',
-              name: '公告管理'
-            },
-            {
-              index: '5-2',
-              route: 'admin-activity-list',
-              name: '活动管理'
-            },
-            {
-              index: '5-3',
-              route: 'admin-association-manage',
-              name: '社团管理'
-            }
-          ]
+          route: 'user',
+          icon: 'iconfont icon-user',
+          name: '个人中心',
+          state: 'user',
+          show: !isAdmin && isLogin
         },
-        // 系统管理员
+        // 社团管理员
         {
           index: '6',
           route: null,
           icon: 'iconfont icon-setting',
           name: '后台管理',
-          state: 'systemAdmin',
-          show: isAdmin && isSystemAdmin,
+          show: isAdmin && !isSystemAdmin,
+          state: 'assoAdmin',
           submenus: [
             {
               index: '6-1',
@@ -127,11 +110,37 @@ export default {
             },
             {
               index: '6-2',
+              route: 'admin-activity-list',
+              name: '活动管理'
+            },
+            {
+              index: '6-3',
+              route: 'admin-association-manage',
+              name: '社团管理'
+            }
+          ]
+        },
+        // 系统管理员
+        {
+          index: '7',
+          route: null,
+          icon: 'iconfont icon-setting',
+          name: '后台管理',
+          state: 'systemAdmin',
+          show: isAdmin && isSystemAdmin,
+          submenus: [
+            {
+              index: '7-1',
+              route: 'admin-notice-list',
+              name: '公告管理'
+            },
+            {
+              index: '7-2',
               route: 'activity-approve',
               name: '活动审批'
             },
             {
-              index: '6-3',
+              index: '7-3',
               route: 'admin-association-add',
               name: '社团管理'
             }
@@ -144,10 +153,21 @@ export default {
     ...mapState(['userInfo'])
   },
   methods: {
+    isShowItem (isShow) {
+      if (typeof isShow === 'undefined') {
+        return true
+      } else {
+        return isShow
+      }
+    },
     updateMenuList () {
       let isAdmin = this.userInfo.id && this.userInfo.isAdmin
       let isSystemAdmin = this.userInfo.isSystem
+      let isLogin = this.userInfo.id !== null
       this.menuList.forEach(item => {
+        if (item.state === 'user') {
+          item.show = !isAdmin && isLogin
+        }
         if (item.state === 'assoAdmin') {
           item.show = isAdmin && !isSystemAdmin
         } else if (item.state === 'systemAdmin') {
@@ -157,8 +177,7 @@ export default {
     }
   },
   watch: {
-    'userInfo.isAdmin' () {
-      console.log(123)
+    'userInfo.id' () {
       this.updateMenuList()
     }
   },

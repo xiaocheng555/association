@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 4:31:23 am
+ * Last Modified: 2018-05-08 11:57:38 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -179,16 +179,22 @@ export default {
       })
     },
     deleteAssociation (item) {
-      this.$store.dispatch('association-destroy', {
-        data: {
-          associationId: item.id
-        }
-      }).then(res => {
-        if (res && res.errorCode === 0) {
-          this.$message.success('社团删除成功')
-          this.fetchAssociationList()
-        }
-      })
+      this.$confirm('确定删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('association-destroy', {
+          data: {
+            associationId: item.id
+          }
+        }).then(res => {
+          if (res && res.errorCode === 0) {
+            this.$message.success('社团删除成功')
+            this.fetchAssociationList()
+          }
+        })
+      }).catch(() => {})
     },
     toggleAssociation (item) {
       this.currAssoId = item.id

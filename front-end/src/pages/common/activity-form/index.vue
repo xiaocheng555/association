@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-04 1:24:14 am
+ * Last Modified: 2018-05-08 4:09:52 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -126,7 +126,7 @@ export default {
         ],
         score: [
           { required: true, message: '请输入分数', trigger: 'blur' },
-          { pattern: /^([0]|[1-9]+)(\.?[0-9]{2})?$/, message: '格式不正确', trigger: 'blur' }
+          { pattern: /^([0]|[1-9]+)(\.?[0-9]{1})?$/, message: '格式不正确', trigger: 'blur' }
         ],
         director: [
           { required: true, message: '请输入负责人', trigger: 'blur' },

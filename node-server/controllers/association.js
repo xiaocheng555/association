@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 3:29:41 pm
+ * Last Modified: 2018-05-08 11:40:53 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -250,6 +250,40 @@ exports.studentJoinList = async function (req, res, next) {
 }
 
 /* 
+ * 所有参与社团的学生id列表
+*/
+exports.studentJoinIdsList = async function (req, res, next) {
+  let associationId = req.query.associationId
+  // 加入社团的状态，0为等待审批，1为已经加入，2-任命部门职位，3为部门退任，-1为审批不通过
+  // 通过加入社团学生的状态进行学生筛选
+  let joinStatus = req.query.joinStatus
+  // 分页
+  let studentList = await Student.findAll({
+    include: [{
+      model: Association,
+      where: {
+        id: associationId
+      },
+      through: {
+        where: {
+          joinStatus: joinStatus
+        }
+      }
+    }]
+  })
+  let ids = []
+  if (studentList.length > 0) {
+    studentList.forEach(student => {
+      ids.push(student.id)
+    })
+  }
+  res.json({
+    errorCode: 0,
+    data: ids
+  })
+}
+
+/* 
  * 删除参与社团的学生
 */
 exports.deleteStudentJoin = async function (req, res, next) {
@@ -262,5 +296,34 @@ exports.deleteStudentJoin = async function (req, res, next) {
   res.json({
     errorCode: 0,
     message: '删除学生与社团的关联成功'
+  })
+}
+
+/* 
+ * 获取学生参加的社团列表
+*/
+exports.studentJoinAssoList = async function (req, res, next) {
+  let studentId = req.query.studentId
+  // 分页
+  let associationList = await Association.findAll({
+    include: [{
+      model: Student,
+      through: {
+        where: {
+          joinStatus: 1,
+          studentId: studentId
+        }
+      }
+    }]
+  })
+  let resListData = []
+  associationList.forEach(association => {
+    if (association.students.length !== 0) {
+      resListData.push(association)
+    }
+  })
+  res.json({
+    errorCode: 0,
+    data: resListData
   })
 }

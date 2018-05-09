@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 4:07:03 am
+ * Last Modified: 2018-05-08 5:20:48 pm
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -18,7 +18,7 @@
           type="primary"
           size="mini"
           plain
-          @click="addAssoShow = true">添加管理员</el-button>
+          @click="onAddAdminClick">添加管理员</el-button>
       </div>
       <h4 class="admin-list-title">管理员列表</h4>
       <el-table
@@ -82,7 +82,7 @@
         <el-form-item class="admin-form-item" label="名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
-        <el-form-item class="admin-form-item">
+        <el-form-item class="admin-form-item" label="帐号">
           <el-input :disabled="true" v-model="ruleForm.username"></el-input>
         </el-form-item>
         <el-form-item class="admin-form-item" label="密码 " prop="password">
@@ -159,6 +159,12 @@ export default {
         }
       })
     },
+    onAddAdminClick () {
+      this.ruleForm.name = ''
+      this.ruleForm.username = ''
+      this.ruleForm.password = ''
+      this.addAssoShow = true
+    },
     submitAddAdminForm () {
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
@@ -202,16 +208,22 @@ export default {
       })
     },
     deleteAdmin (item) {
-      this.$store.dispatch('admin-destroy', {
-        data: {
-          adminId: item.id
-        }
-      }).then(res => {
-        if (res && res.errorCode === 0) {
-          this.$message.success('管理员删除成功')
-          this.fetchAdminList()
-        }
-      })
+      this.$confirm('确定删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('admin-destroy', {
+          data: {
+            adminId: item.id
+          }
+        }).then(res => {
+          if (res && res.errorCode === 0) {
+            this.$message.success('管理员删除成功')
+            this.fetchAdminList()
+          }
+        })
+      }).catch(() => {})
     },
     toggleAdmin (id) {
       this.$router.push({

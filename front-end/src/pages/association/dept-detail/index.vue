@@ -4,13 +4,13 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-07 4:30:12 pm
+ * Last Modified: 2018-05-08 9:43:11 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
 <template>
   <div class="dept-detail">
-    <common-pannel title="部门详情">
+    <common-pannel title="部门介绍">
       <div class="dept-article">
         <h3 class="article-title">{{ deptDeatil.name }}</h3>
         <div v-html="deptDeatil.introduce"></div>
