@@ -4,7 +4,7 @@
  * Author: zhanghuancheng555 (1052745517@qq.com)
  * Copyright: 2017 - 2018 Your Company, Your Company
  * -----
- * Last Modified: 2018-05-03 6:36:05 pm
+ * Last Modified: 2018-05-02 12:19:36 am
  * Modified By: zhanghuancheng555 (1052745517@qq.com>)
  */
 
@@ -92,10 +92,10 @@ exports.update = function (req, res, next) {
 exports.detail = async function (req, res, next) {
   let id = req.query.id
   Notice.findOne({
-    include: [{ 
-      model: Admin, 
-      include: [Association]
-    }],
+    include: [
+      { model: Admin},
+      { model: Association }
+    ],
     where: {
       id: id
     }
@@ -105,7 +105,7 @@ exports.detail = async function (req, res, next) {
       content: data.content,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
-      principal: data.association ? item.association.name : '系统'
+      principal: data.association ? data.association.name : '系统'
     }
     res.json({
       errorCode: 0,
